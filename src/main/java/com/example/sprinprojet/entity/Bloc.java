@@ -9,6 +9,7 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table( name = "Bloc")
@@ -34,8 +35,8 @@ public class Bloc implements Serializable {
     private Foyer foyer ;
 
 
-    @OneToMany( cascade = CascadeType.ALL,mappedBy="bloc")
-    private List<Chambre> chambres;
+    @OneToMany( cascade = CascadeType.ALL,mappedBy="bloc",fetch=FetchType.EAGER)
+    private Set<Chambre> chambres;
 
     public void setChambresBloc(Chambre chambre) {
     }

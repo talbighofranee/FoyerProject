@@ -19,7 +19,7 @@ public class Universite implements Serializable {
 
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name="idUniversite")
-   private String idUniversite; // Clé primaire
+   private Long idUniversite; // Clé primaire
 
     private String nom;
 

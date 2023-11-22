@@ -15,4 +15,5 @@ public interface IChambreService {
     Chambre retrieveChambre(Long idChambre);
 
     void removeChambre(Long idChambre);
+    void pourcentageChambreParTypeChambre();
 }

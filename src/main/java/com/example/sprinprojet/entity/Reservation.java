@@ -18,7 +18,7 @@ import java.util.List;
 @Table( name = "Reservation")
 public class Reservation implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name="idReservation")
 
     private String idReservation; // Clé primaire
@@ -28,7 +28,7 @@ public class Reservation implements Serializable {
 
 
     @Temporal(TemporalType.DATE)
-    private Date anneeUniveritaire;
+    private Date anneeUniversitaire;
 
 
     @ManyToMany(mappedBy="reservations",cascade = CascadeType.ALL)
@@ -37,6 +37,7 @@ public class Reservation implements Serializable {
     public void setEtudiantsReservation(Etudiant etudiant) {
     }
 
-
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Chambre chambre;
 
 }

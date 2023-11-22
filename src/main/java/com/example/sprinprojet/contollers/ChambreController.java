@@ -38,4 +38,5 @@ public class ChambreController {
         Chambre chambre= iChambreService.updateChambre(ch);
         return chambre;
     }
+
 }
