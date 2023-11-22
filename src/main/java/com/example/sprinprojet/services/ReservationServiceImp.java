@@ -5,6 +5,7 @@ import com.example.sprinprojet.repository.ReservationRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -35,6 +36,13 @@ public class ReservationServiceImp implements IReservationService {
     @Override
     public void removeReservation(String idReservation) {
         reservationRepository.deleteById(idReservation);
+
+    }
+    public List<Reservation> getReservationParAnneeUniversitaire(Date dateDebut, Date dateFin )
+    {
+
+        List<Reservation> allReservations = reservationRepository.findByAnneeUniversitaireBetween(dateDebut,dateFin);
+        return allReservations;
 
     }
 }
