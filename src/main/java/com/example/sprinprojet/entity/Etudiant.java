@@ -1,5 +1,6 @@
 package com.example.sprinprojet.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,10 +32,11 @@ public class Etudiant implements Serializable {
     private Long cin;
 
     private String ecole;
+    private String StudentEmail;
 
     @Temporal(TemporalType.DATE)
     private Date dateNaissance;
-
+@JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Reservation> reservations; //etudiant parent
 

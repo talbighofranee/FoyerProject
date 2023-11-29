@@ -35,6 +35,8 @@ public class BlocController {
     public void removeBloc(@PathVariable("bloc-id") Long idBloc) {
         iBlocService.removeBloc(idBloc);
     }
+
+
     @PutMapping("/update-bloc")
     public Bloc updateBloc(@RequestBody Bloc b) {
         Bloc bloc= iBlocService.updateBloc(b);

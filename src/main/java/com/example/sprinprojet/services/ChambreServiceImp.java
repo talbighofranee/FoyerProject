@@ -59,7 +59,7 @@ public Set<Chambre>getChambreParNomBloc(String nomb){
       Set<Chambre> chambre=b.getChambres();
       return chambre;
 }
-   @Override
+  /*
    @Scheduled(fixedRate = 60000)
    public void pourcentageChambreParTypeChambre() {
 
@@ -74,7 +74,7 @@ public Set<Chambre>getChambreParNomBloc(String nomb){
       System.out.println("Le pourcentage des chambres de type TRIPLE est :" +(countParTypeTRIPLE*100)/nb);
 
 
-   }
+   }*/
   /* @Scheduled(fixedRate = 60000)
    void nbPlacesDispo(){
 List<Chambre>ch =chambreRepository.findAll();

@@ -1,5 +1,6 @@
 package com.example.sprinprojet.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class Universite implements Serializable {
     private String adresse ;
 
 @OneToOne(mappedBy="universite")
+@JsonIgnore
     private Foyer foyer;
 
 

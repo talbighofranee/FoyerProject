@@ -59,7 +59,7 @@ blocRepository.deleteById(idBloc);
 
     }
 
-    @Scheduled(fixedRate = 60000)
+   /* @Scheduled(fixedRate = 60000)
 
 
     public void  listeChambresParBloc() {
@@ -75,5 +75,5 @@ blocRepository.deleteById(idBloc);
                    }
            );
         }
-    }
+    }*/
 }
