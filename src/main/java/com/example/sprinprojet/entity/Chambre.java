@@ -33,6 +33,7 @@ public class Chambre implements Serializable {
     private Bloc bloc;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Reservation> Reservations;
 // Constructeur et accesseurs (getters) et mutateurs (setters)
 

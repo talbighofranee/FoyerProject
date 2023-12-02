@@ -38,6 +38,7 @@ public class Bloc implements Serializable {
 
 
     @OneToMany( cascade = CascadeType.ALL,mappedBy="bloc",fetch=FetchType.EAGER)
+   @JsonIgnore
     private Set<Chambre> chambres;
 
     public void setChambresBloc(Chambre chambre) {
