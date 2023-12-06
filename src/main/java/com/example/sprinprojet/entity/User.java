@@ -29,6 +29,6 @@ public class User implements Serializable {
 
     private String motdepasse;
 
-    @Enumerated(EnumType.STRING) // Spécifiez le type d'enumération
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 }

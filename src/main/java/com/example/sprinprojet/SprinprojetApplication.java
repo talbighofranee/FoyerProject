@@ -1,5 +1,6 @@
 package com.example.sprinprojet;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +38,10 @@ public class SprinprojetApplication {
             source.registerCorsConfiguration("/**", config);
             return new CorsFilter(source);
         }
+    }
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 
 }
