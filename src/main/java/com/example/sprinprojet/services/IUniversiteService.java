@@ -7,13 +7,21 @@ import java.util.List;
 public interface IUniversiteService {
     List<Universite> retrieveAllUniversites();
 
-    Universite addUniversite(Universite u);
+    Universite addUniversites(Universite e);
 
-    Universite updateUniversite(Universite u);
+    Universite updateUniversites(Universite e);
 
-    Universite retrieveUniversite(Long idUniversite);
+    Universite retrieveUniversites(Long idUniversite);
 
-    void removeUniversite(Long idUniversite);
-     Universite affecterFoyerAUniversite (long idFoyer, String nom) ;
-  Universite desaffecterFoyerAUniversite (long idFoyer);
+    void removeUniversites(Long idUniversite);
+
+    public Universite affecterFoyerAUniversite (long idFoyer, String nomUniversite) ;
+
+    public Universite desaffecterFoyerAUniversite (long idFoyer);
+    public Universite getbyidUni(Long idUniversite);
+
+    Integer countUniversites();
+
+    List<Universite> rechercheParNom(String nomUniversite);
+    public byte[] generateQRCode(Universite universite);
 }

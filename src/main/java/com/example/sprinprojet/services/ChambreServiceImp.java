@@ -54,12 +54,18 @@ public class ChambreServiceImp implements IChambreService {
       chambreRepository.deleteById(idChambre);
 
    }
-public Set<Chambre>getChambreParNomBloc(String nomb){
+
+    @Override
+    public void pourcentageChambreParTypeChambre() {
+
+    }
+
+    public Set<Chambre>getChambreParNomBloc(String nomb){
       Bloc b =blocRepository.findByNomBloc(nomb);
       Set<Chambre> chambre=b.getChambres();
       return chambre;
 }
-  /*
+   /*@Override
    @Scheduled(fixedRate = 60000)
    public void pourcentageChambreParTypeChambre() {
 

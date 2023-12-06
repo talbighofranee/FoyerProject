@@ -1,6 +1,5 @@
 package com.example.sprinprojet.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,27 +9,22 @@ import lombok.Setter;
 import java.io.Serializable;
 
 @Entity
-@Table(name="Universite")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Table( name = "Universite")
 public class Universite implements Serializable {
-   @Id
+    @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @Column(name="idUniversite")
+    private Long idUniversite; // Clé primaire
+    private String nomUniversite;
 
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @Column(name="idUniversite")
-   private Long idUniversite; // Clé primaire
+    private String address;
 
-    private String nom;
-
-    private String adresse ;
-
-@OneToOne(mappedBy="universite")
-@JsonIgnore
+    @OneToOne(mappedBy = "universite")
     private Foyer foyer;
-
-
     public void setFoyUni(Foyer foyer) {
     }
 }

@@ -8,55 +8,73 @@ import com.example.sprinprojet.entity.Foyer;
 import com.example.sprinprojet.services.FoyerServiceImp;
 import com.example.sprinprojet.services.IFoyerService;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
+//@CrossOrigin(origins = "http://localhost:4200") // Replace with the actual origin of your Angular app
 @AllArgsConstructor
 @RestController
 
 @RequestMapping("/foyer")
 public class FoyerController {
-   FoyerServiceImp FoyerService;
+    private IFoyerService foyerService;
 
-   @GetMapping("/getall")
+    @GetMapping("/retrieve-all-foyer")
+    public List<Foyer> getFoyers() {
+        List<Foyer> listFoyers = foyerService.retrieveAllFoyers();
+        return listFoyers;
+    }
 
-   public List<Foyer>getFoyerList(){
-      List<Foyer>foyerList=FoyerService.retrieveAllFoyers();
-      return foyerList;
-   }
+    @GetMapping("/retrieve-foyer/{foyer-id}")
+    public Foyer retrieveFoyer(@PathVariable("foyer-id") Long foyerId) {
+        return foyerService.retrieveFoyer(foyerId);
+    }
 
-
-   @PostMapping("/add-Foyer")
-   public Foyer addFoyer(@RequestBody Foyer f) {
-      Foyer foyer = FoyerService.addFoyer(f);
-      return foyer;
-   }
-   @GetMapping("/retrieve-Foyer/{Foyer-id}")
-   public Foyer retrieveFoyer(@PathVariable("Foyer-id") Long idFoyer) {
-
-      return FoyerService.retrieveFoyer(idFoyer);
-   }
-   @DeleteMapping("/remove-Foyer/{Foyer-id}")
-   public void removeFoyer(@PathVariable("Foyer-id") Long idFoyer) {
-      FoyerService.removeFoyer(idFoyer);
-   }
-   @PutMapping("/update-Foyer")
-   public Foyer updateFoyer(@RequestBody Foyer f) {
-      Foyer foyer= FoyerService.updateFoyer(f);
-      return foyer;
-   }
-  @PutMapping("/archiver_foyer/{foyer-id}")
-   public void archiverFoyer(@PathVariable("foyer-id") Long idFoyer){
-     FoyerService.archiverFoyer(idFoyer);
-
-
-
-   }
-    @PostMapping("/addfoyerbloc")
-    public Foyer ajouterfoyeravecbloc (@RequestBody Foyer f) {
-        Foyer foyer = FoyerService.addFoyerWithBloc(f);
+    @PostMapping("/add-foyer")
+    public Foyer addFoyer(@RequestBody Foyer e) {
+        Foyer foyer = foyerService.addFoyer(e);
         return foyer;
     }
 
+    @DeleteMapping("/remove-foyer/{foyer-id}")
+    public void removeFoyer(@PathVariable("foyer-id") Long foyerId) {
+        foyerService.removeFoyer(foyerId);
     }
+
+    @PutMapping("/update-foyer")
+    public Foyer updateFoyer(@RequestBody Foyer e) {
+        Foyer foyer= foyerService.updateFoyer(e);
+        return foyer;
+    }
+
+    @GetMapping("/Foyerpagination")
+    @ResponseBody
+    public Page<Foyer> getAllFoyer(Pageable pageable) {
+        return foyerService.lire(pageable);
+    }
+
+    @GetMapping("/export/excel")
+
+    public ResponseEntity<InputStreamResource> exportFoyersExcel() throws IOException {
+
+        List<Foyer> foyers = (List<Foyer>) foyerService.retrieveAllFoyers();
+        ByteArrayInputStream bais = foyerService.experienceExcelReport(foyers);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=foyers.xlsx");
+        return ResponseEntity.ok().headers(headers).body(new InputStreamResource(bais));
+    }
+
+    @GetMapping("/foyersize/{size}")
+    List<Foyer> listUniverApartirDate(@PathVariable("size") long capacite){
+        return foyerService.listefoyerwheresizebiggerthan(capacite);
+    }
+
+}

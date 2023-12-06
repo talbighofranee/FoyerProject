@@ -1,8 +1,6 @@
 package com.example.sprinprojet.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jdk.jshell.Snippet;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,23 +24,19 @@ public class Reservation implements Serializable {
     private String idReservation; // Clé primaire
 
 
-    private boolean estValide=false;
+    private boolean estValide;
 
 
     @Temporal(TemporalType.DATE)
     private Date anneeUniversitaire;
 
-    @Temporal(TemporalType.DATE)
-    private Date dateCreation;
-    @Enumerated(EnumType.STRING)
-    private Status status;
-    @JsonIgnore
+
     @ManyToMany(mappedBy="reservations",cascade = CascadeType.ALL)
     private List<Etudiant> etudiants;
 
     public void setEtudiantsReservation(Etudiant etudiant) {
     }
-    @JsonIgnore
+
     @ManyToOne(cascade = CascadeType.ALL)
     private Chambre chambre;
 

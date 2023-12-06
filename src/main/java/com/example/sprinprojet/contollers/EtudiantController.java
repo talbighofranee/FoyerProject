@@ -20,8 +20,8 @@ import java.util.List;
 @RequestMapping("/etudiant")
 public class EtudiantController {
     IEtudiantService iEtudiantService;
-    @GetMapping("/retrieve-all-etudiants")
 
+    @GetMapping("/retrieve-all-etudiants")
           public List<Etudiant>getEtudiantList(){
         List<Etudiant>etudiantList=iEtudiantService.retrieveAllEtudiants();
         return etudiantList;
@@ -65,7 +65,7 @@ public class EtudiantController {
     public Etudiant affecter(@PathVariable("prenom") String prenom ,@PathVariable("idreservation") String idReservation, @PathVariable("nom") String nom){
         Etudiant etudiant=iEtudiantService.affecterEtudiantAReservation( nom,  prenom,  idReservation);
         return etudiant;
-
-
     }
+
+
 }

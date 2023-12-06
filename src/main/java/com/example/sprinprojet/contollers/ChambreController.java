@@ -13,8 +13,8 @@ import java.util.List;
 @RequestMapping("/chambre")
 public class ChambreController {
     IChambreService iChambreService;
-    @GetMapping("/retrieve-all-chambre")
 
+    @GetMapping("/retrieve-all-chambre")
     public List<Chambre> getChambreList(){
         List<Chambre>chambreList=iChambreService.retrieveAllChambres();
         return chambreList;
