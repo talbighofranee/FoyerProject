@@ -1,5 +1,6 @@
 package com.example.sprinprojet.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,6 +37,8 @@ public class Bloc implements Serializable {
 
 
     @OneToMany( cascade = CascadeType.ALL,mappedBy="bloc",fetch=FetchType.EAGER)
+    @JsonIgnore
+
     private Set<Chambre> chambres;
 
     public void setChambresBloc(Chambre chambre) {

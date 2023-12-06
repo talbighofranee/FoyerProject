@@ -1,5 +1,6 @@
 package com.example.sprinprojet.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,6 +32,8 @@ public class Chambre implements Serializable {
     private Bloc bloc;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+
     private List<Reservation> Reservations;
 // Constructeur et accesseurs (getters) et mutateurs (setters)
 
