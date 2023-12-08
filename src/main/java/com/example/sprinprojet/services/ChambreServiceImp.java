@@ -8,11 +8,20 @@ import com.example.sprinprojet.repository.BlocRepository;
 import com.example.sprinprojet.repository.ChambreRepository;
 import com.example.sprinprojet.repository.FoyerRepository;
 import com.example.sprinprojet.repository.ReservationRepository;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -109,4 +118,20 @@ List<Chambre>ch =chambreRepository.findAll();
 
       }
    }*/
+
+  public byte[] generateQRCode(Chambre chambre) throws IOException, WriterException {
+    String chambreDetails = "Chambre: " + chambre.getNumeroChambre() ;
+
+    Map<EncodeHintType, Object> hintMap = new HashMap<>();
+    hintMap.put(EncodeHintType.ERROR_CORRECTION, "L");
+    hintMap.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+
+    QRCodeWriter qrCodeWriter = new QRCodeWriter();
+    BitMatrix bitMatrix = qrCodeWriter.encode(chambreDetails, BarcodeFormat.QR_CODE, 300, 300, hintMap);
+
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    MatrixToImageWriter.writeToStream(bitMatrix, "PNG", byteArrayOutputStream);
+
+    return byteArrayOutputStream.toByteArray();
+  }
 }

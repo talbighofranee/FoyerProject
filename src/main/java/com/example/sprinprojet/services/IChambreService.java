@@ -2,7 +2,9 @@ package com.example.sprinprojet.services;
 
 
 import com.example.sprinprojet.entity.Chambre;
+import com.google.zxing.WriterException;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface IChambreService {
@@ -16,4 +18,6 @@ public interface IChambreService {
 
     void removeChambre(Long idChambre);
     void pourcentageChambreParTypeChambre();
+  byte[] generateQRCode(Chambre chambre) throws IOException, WriterException;
+
 }

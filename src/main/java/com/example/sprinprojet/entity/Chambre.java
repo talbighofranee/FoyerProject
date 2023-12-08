@@ -24,11 +24,13 @@ public class Chambre implements Serializable {
     private Long idChambre; // Clé primaire
 
     @Enumerated(EnumType.STRING)
+
     private TypeChambre typeC;
 
     private Long numeroChambre;
 
     @ManyToOne
+    @JsonIgnore
     private Bloc bloc;
 
     @OneToMany(cascade = CascadeType.ALL)
