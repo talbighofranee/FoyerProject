@@ -17,12 +17,14 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:50313")
 @RequestMapping("/etudiant")
 public class EtudiantController {
-    IEtudiantService iEtudiantService;
+    EtudiantServiceImp iEtudiantService;
 
     @GetMapping("/retrieve-all-etudiants")
-          public List<Etudiant>getEtudiantList(){
+
+    public List<Etudiant>getEtudiantList(){
         List<Etudiant>etudiantList=iEtudiantService.retrieveAllEtudiants();
         return etudiantList;
     }
@@ -51,11 +53,16 @@ public class EtudiantController {
     public void removeEtudiant(@PathVariable("etudiant-id") Long idEtudiant) {
         iEtudiantService.removeEtudiant(idEtudiant);
     }
-    @PutMapping("/update-etudiant")
-    public Etudiant updateEtudiant(@RequestBody Etudiant e) {
+    /*@PutMapping("/update-etudiant/{idEtudiant}")
+    public Etudiant updateEtudiant(@PathVariable("idEtudiant") Long idEtudiant ,@RequestBody Etudiant e) {
         Etudiant etudiant= iEtudiantService.updateEtudiant(e);
         return etudiant;
+    }*/
+    @PutMapping("/update-etudiant/{id}")
+    public Etudiant updateEtudiantByID(@PathVariable("id") Long idEtudiant, @RequestBody Etudiant updatedEtudiant) {
+        return iEtudiantService.updateEtudiantAndReservations(idEtudiant, updatedEtudiant);
     }
+
     @PostMapping("/add-all-etudiants")
     public List addAllEtudiants(@RequestBody List<Etudiant>etudiants){
         List Listetudiant=iEtudiantService.addEtudiants(etudiants);
@@ -65,7 +72,7 @@ public class EtudiantController {
     public Etudiant affecter(@PathVariable("prenom") String prenom ,@PathVariable("idreservation") String idReservation, @PathVariable("nom") String nom){
         Etudiant etudiant=iEtudiantService.affecterEtudiantAReservation( nom,  prenom,  idReservation);
         return etudiant;
+
+
     }
-
-
 }
