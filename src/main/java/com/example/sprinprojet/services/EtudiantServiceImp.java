@@ -2,6 +2,7 @@ package com.example.sprinprojet.services;
 
 import com.example.sprinprojet.entity.Etudiant;
 import com.example.sprinprojet.entity.Reservation;
+import com.example.sprinprojet.entity.Status;
 import com.example.sprinprojet.repository.EtudiantRepository;
 import com.example.sprinprojet.repository.ReservationRepository;
 import lombok.AllArgsConstructor;
@@ -47,7 +48,12 @@ ReservationRepository reservationRepository;
 
     }
 
-    @Override
+  @Override
+  public List<Etudiant> addEtudiants(List<Etudiant> etudiants) {
+    return null;
+  }
+
+  @Override
     public Etudiant affecterEtudiantAReservation(String nomEt, String prenomEt, String idReservation) {
         Etudiant etudiant = etudiantRepository.findByNomEtAndPrenomEt(nomEt, prenomEt);
         Reservation reservation = reservationRepository.findById(idReservation).get();
