@@ -50,27 +50,39 @@ ReservationRepository reservationRepository;
     @Override
     public Etudiant affecterEtudiantAReservation(String nomEt, String prenomEt, String idReservation) {
         Etudiant etudiant = etudiantRepository.findByNomEtAndPrenomEt(nomEt, prenomEt);
-
-        // Find the Reservation by ID
         Reservation reservation = reservationRepository.findById(idReservation).get();
-
-
-        // Add the Etudiant to the Reservation's set of etudiant
-
         List<Reservation> reservations =  new ArrayList<>() ;
         reservations=etudiant.getReservations();
         reservations.add(reservation);
 
         etudiant.setReservations(reservations);
-        // Update the Reservation
+
         etudiantRepository.save(etudiant);
         return etudiant;
     }
 
 
+    public Etudiant updateEtudiantAndReservations(Long idEtudiant, Etudiant updatedEtudiant) {
+        Etudiant existingEtudiant = etudiantRepository.findById(idEtudiant).orElse(null);
 
-    @Override
-    public List<Etudiant> addEtudiants(List<Etudiant> etudiants) {
-        return etudiantRepository.saveAll(etudiants);
+        if (existingEtudiant != null) {
+            existingEtudiant.setNomEt(updatedEtudiant.getNomEt());
+            existingEtudiant.setPrenomEt(updatedEtudiant.getPrenomEt());
+            existingEtudiant.setStudentEmail(updatedEtudiant.getStudentEmail());
+            existingEtudiant.setCin(updatedEtudiant.getCin());
+            existingEtudiant.setEcole(updatedEtudiant.getEcole());
+            existingEtudiant.setDateNaissance(updatedEtudiant.getDateNaissance());
+
+            List<Reservation> updatedReservations = updatedEtudiant.getReservations();
+            List<Reservation> existingReservations = existingEtudiant.getReservations();
+            existingReservations.removeIf(reservation -> reservation.getStatus() == Status.Annulee);
+            existingReservations.addAll(updatedReservations);
+            existingEtudiant.setReservations(existingReservations);
+            return etudiantRepository.save(existingEtudiant);
+        } else {
+            return null;
+        }
     }
+
+
 }
