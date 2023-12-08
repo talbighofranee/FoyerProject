@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -76,4 +78,28 @@ blocRepository.deleteById(idBloc);
            );
         }
     }
+
+  @Override
+  public void trierBlocsParNomBloc(List<Bloc> blocs) {
+    Collections.sort(blocs, Comparator.comparing(Bloc::getNomBloc));
+  }
+  @Scheduled(fixedRate = 20000) // Définir le taux en millisecondes (ici, chaque minute)
+  public void checkAvailableRooms() {
+    List<Bloc> blocs = blocRepository.findAll();
+
+    for (Bloc bloc : blocs) {
+      long capaciteBloc = bloc.getCapacitebloc();
+      long nombreChambresCreees = bloc.getChambres().size();
+      long chambresDisponibles = capaciteBloc - nombreChambresCreees;
+
+      if (chambresDisponibles > 0) {
+        log.info("Pour le bloc " + bloc.getNomBloc() + ", il reste " +
+          chambresDisponibles + " chambre(s) disponible(s).");
+      } else {
+        log.info("Pour le bloc " + bloc.getNomBloc() + ", toutes les chambres sont occupées.");
+      }
+    }
+  }
+
 }
+

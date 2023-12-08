@@ -42,9 +42,10 @@ public class Bloc implements Serializable {
 
     private Set<Chambre> chambres;
 
-    public void setChambresBloc(Chambre chambre) {
-    }
+  @OneToMany(cascade = CascadeType.ALL)
+  @JsonIgnore
+  private List<Reservation> Reservations;
 
-
-
+  public void setBlocChambre(List<Chambre> chambers) {
+  }
 }

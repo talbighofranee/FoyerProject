@@ -2,6 +2,7 @@ package com.example.sprinprojet.contollers;
 
 import com.example.sprinprojet.entity.Chambre;
 
+import com.example.sprinprojet.entity.TypeChambre;
 import com.example.sprinprojet.repository.ChambreRepository;
 import com.example.sprinprojet.services.IChambreService;
 import com.google.zxing.WriterException;
@@ -89,5 +90,27 @@ public class ChambreController {
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  @GetMapping("/{nomBloc}")
+  public List<Chambre> getChambresParNomBloc(@PathVariable String nomBloc) {
+    List<Chambre> chambres = iChambreService.getChambresParNomBloc(nomBloc);
+    return chambres;
+  }
+  @GetMapping("/nbChambreParTypeEtBloc/{typeChambre}/{idBloc}")
+  public long nbChambreParTypeEtBloc(@PathVariable TypeChambre typeChambre , @PathVariable Long idBloc){
+    return iChambreService.nbChambreParTypeEtBloc(typeChambre, idBloc);
 
+  }
+
+  @PostMapping("/affecter-chambre-a-bloc/{chambre-id}/{bloc-id}")
+  public ResponseEntity<Chambre> affecterChambreABloc(
+    @PathVariable("chambre-id") Long chambreId,
+    @PathVariable("bloc-id") Long blocId) {
+
+    Chambre chambre = iChambreService.affecterChambreABloc(chambreId, blocId);
+    if (chambre != null) {
+      return new ResponseEntity<>(chambre, HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+  }
 }

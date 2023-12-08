@@ -15,16 +15,15 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import lombok.AllArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
@@ -37,6 +36,7 @@ public class ChambreServiceImp implements IChambreService {
    BlocRepository blocRepository;
    FoyerRepository foyerRepository;
    ReservationRepository reservationRepository;
+  private final JavaMailSender javaMailSender;
 
    @Override
    public List<Chambre> retrieveAllChambres() {
@@ -64,10 +64,7 @@ public class ChambreServiceImp implements IChambreService {
 
    }
 
-    @Override
-    public void pourcentageChambreParTypeChambre() {
 
-    }
 
     public Set<Chambre>getChambreParNomBloc(String nomb){
       Bloc b =blocRepository.findByNomBloc(nomb);
@@ -133,5 +130,69 @@ List<Chambre>ch =chambreRepository.findAll();
     MatrixToImageWriter.writeToStream(bitMatrix, "PNG", byteArrayOutputStream);
 
     return byteArrayOutputStream.toByteArray();
+  }
+
+
+
+
+  @Override
+  @Scheduled(cron = "0 1 * * * *")
+  public void pourcentageChambreParTypeChambre() {
+
+    Map<TypeChambre, List<Chambre>> chambreByType = chambreRepository.findAll()
+      .stream()
+      .collect(Collectors.groupingBy(Chambre::getTypeC));
+
+
+    long totalchbres = chambreRepository.count();
+    chambreByType.forEach((type, chbres) -> {
+      double pourcentage = (chbres.size() * 100.0) / totalchbres;
+      System.out.printf("nbre total des chbres"+chambreByType.get(totalchbres)+"le pourcentage de chmbre par type Type chambre ", type, pourcentage);
+    });
+  }
+  public List<Chambre> getChambresParNomBloc(String nomBloc) {
+    // Use the BlocRepository to find the Bloc entity by nomBloc
+    Bloc bloc = blocRepository.findByNomBloc(nomBloc);
+
+    if (bloc != null) {
+      // If the Bloc is found, retrieve the associated Chambres
+      Set<Chambre> chambres = bloc.getChambres();
+      return new ArrayList<>(chambres); // Convert the Set to a List
+    } else {
+      // Handle the case where no Bloc is found by the given nomBloc
+      return Collections.emptyList(); // Return an empty list or handle the situation as needed
+    }
+  }
+
+  public long nbChambreParTypeEtBloc(TypeChambre type, long idBloc) {
+    return chambreRepository.countByTypeCAndBloc_IdBloc(type, idBloc);
+  }
+
+
+
+
+
+  @Override
+  public void sendEmail(String to, String subject, String body) {
+    SimpleMailMessage message = new SimpleMailMessage();
+    message.setTo(to);
+    message.setSubject(subject);
+    message.setText(body);
+    javaMailSender.send(message);
+  }
+  public Chambre affecterChambreABloc(Long chambreId, Long blocId) {
+    Chambre chambre = chambreRepository.findById(chambreId).orElse(null);
+    Bloc bloc = blocRepository.findById(blocId).orElse(null);
+
+    if (chambre != null && bloc != null) {
+      chambre.setBloc(bloc);
+      chambreRepository.save(chambre);
+      String to = "emna.felfel@esprit.tn"; // replace with the recipient's email
+      String subject = "Chambre Assigned to Bloc";
+      String body = "Chambre with ID " + chambreId + " has been assigned to Bloc " + bloc.getNomBloc();
+
+      sendEmail(to, subject, body);
+    }
+    return chambre;
   }
 }

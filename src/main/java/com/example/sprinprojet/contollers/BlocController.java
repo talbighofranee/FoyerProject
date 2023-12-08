@@ -45,7 +45,11 @@ public class BlocController {
     public void removeBloc(@PathVariable("bloc-id") Long idBloc) {
         iBlocService.removeBloc(idBloc);
     }
-
+  @PutMapping("/update-bloc")
+  public Bloc updateBloc(@RequestBody  Bloc b) {
+    Bloc bloc= iBlocService.updateBloc(b);
+    return bloc;
+  }
 
     @Operation(summary = "Update Bloc", description = "Update an existing Bloc entity.")
 
@@ -65,6 +69,18 @@ public class BlocController {
             return null;
         }
     }
+  @PutMapping("/affecterChambresABloc/{numChambre}/{nomBloc}")
+  @ResponseBody
+  public Bloc affecterChambresABloc(@PathVariable("numChambre") List<Long> numChambre, @PathVariable("nomBloc") String nomBloc) {
+    Bloc bloc = iBlocService.affecterChambresABloc(numChambre, nomBloc);
+    return bloc;
+  }
+  @GetMapping("/sort-by-name")
+  public List<Bloc> sortBlocsByName() {
+    List<Bloc> blocs = iBlocService. retrieveAllBlocs();
+    iBlocService.trierBlocsParNomBloc(blocs);
+    return blocs;
+  }
 
 
 }
