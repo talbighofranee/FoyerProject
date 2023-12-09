@@ -19,9 +19,6 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ReservationServiceImp implements IReservationService {
     ReservationRepository reservationRepository;
-    @Autowired
-    private EmailService emailService;
-
 
     @Override
     public List<Reservation> retrieveAllReservations() {
@@ -55,8 +52,20 @@ public class ReservationServiceImp implements IReservationService {
         return allReservations;
 
     }
+    public boolean updateReservationStatus(String reservationId, Status newStatus) {
+        Optional<Reservation> reservationOptional = reservationRepository.findById(reservationId);
+
+        if (reservationOptional.isPresent()) {
+            Reservation reservation = reservationOptional.get();
+            reservation.setStatus(newStatus);
+            reservationRepository.save(reservation);
+            return true;
+        }
+
+        return false;
+    }
     @Transactional
-    // @Scheduled(fixedRate = 60000)
+    //@Scheduled(fixedRate = 60000)
     //@Scheduled(cron = "0 0 0 * * *")
     public void cancelUnconfirmedReservations() {
         LocalDateTime cutoffDate = LocalDateTime.now().minusHours(1);
@@ -69,17 +78,14 @@ public class ReservationServiceImp implements IReservationService {
             reservationRepository.save(reservation);
         }
     }
-
+    @Autowired
+    private EmailService emailService;
 
     public String getStudentEmail(String reservationId) {
         Optional<Reservation> reservationOptional = reservationRepository.findById(reservationId);
         if (reservationOptional.isPresent()) {
             Reservation reservation = reservationOptional.get();
-
-            // Supposons que vous avez une relation bidirectionnelle ManyToMany entre Reservation et Etudiant
             List<Etudiant> etudiants = reservation.getEtudiants();
-
-            // Choisissez l'étudiant lié à la réservation spécifique
             Etudiant etudiantLie = etudiants.stream()
                     .filter(etudiant -> etudiant.getReservations().contains(reservation))
                     .findFirst()
@@ -98,11 +104,11 @@ public class ReservationServiceImp implements IReservationService {
 
         if (reservation != null && reservation.getStatus() == Status.NON_CONFIRMEE) {
 
-            // Logique de confirmation de la réservation (mettre à jour le statut, etc.)
+
             reservation.setStatus(Status.Confirmee);
             reservationRepository.save(reservation);
             List<Etudiant> etudiants = reservation.getEtudiants();
-            // Envoyer l'e-mail de confirmation
+
             for (Etudiant etudiant : etudiants) {
                 String studentEmail = etudiant.getStudentEmail();
                 if (studentEmail != null) {
@@ -112,4 +118,5 @@ public class ReservationServiceImp implements IReservationService {
                 }
             }}
     }
+
 }

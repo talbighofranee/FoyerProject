@@ -2,6 +2,7 @@ package com.example.sprinprojet.contollers;
 
 
 import com.example.sprinprojet.entity.Reservation;
+import com.example.sprinprojet.entity.Status;
 import com.example.sprinprojet.services.EmailService;
 import com.example.sprinprojet.services.IReservationService;
 
@@ -20,7 +21,6 @@ public class ReservationController {
     IReservationService iReservationService;
     ReservationServiceImp reservationServiceImp;
     EmailService emailService;
-
     @GetMapping("/retrieve-all-Reservations")
 
     public List<Reservation> getReservationList(){
@@ -66,6 +66,16 @@ public class ReservationController {
             return ResponseEntity.ok("Confirmation en cours. Un e-mail sera envoyé à l'étudiant.");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de la récupération de l'e-mail de l'étudiant.");
+        }
+    }
+    @PutMapping("/{reservationId}/update-status")
+    public ResponseEntity<String> updateReservationStatus(
+            @PathVariable String reservationId,
+            @RequestParam Status newStatus) {
+        if (reservationServiceImp.updateReservationStatus(reservationId, newStatus)) {
+            return ResponseEntity.ok("Statut de la réservation mis à jour avec succès.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Réservation non trouvée.");
         }
     }
 }

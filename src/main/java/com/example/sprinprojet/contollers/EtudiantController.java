@@ -75,4 +75,10 @@ public class EtudiantController {
 
 
     }
+    @GetMapping("/{etudiantId}/reservations")
+    public ResponseEntity<List<Reservation>> getReservationsForEtudiant(@PathVariable Long etudiantId) {
+        List<Reservation> reservations = iEtudiantService.getReservationsForEtudiant(etudiantId);
+        return ResponseEntity.ok(reservations);
+    }
+
 }
